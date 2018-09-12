@@ -14,7 +14,7 @@ pipeline {
        stage('Git Checkout'){
            steps{
                cleanWs()
-               git credentialsId: '65bc32a1-9a81-446c-b37b-c0ac940783da', url: 'https://github.com/dhpgitub/sonar-qube-test.git'
+               git credentialsId: '65bc32a1-9a81-446c-b37b-c0ac940783da', url: "${config.gitURL}"
            }
        }
        stage('Gradle Build'){

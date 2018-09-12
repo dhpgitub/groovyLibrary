@@ -26,16 +26,17 @@ pipeline {
            steps{
                script{
                    def jarName = sh returnStdout: true, script: "ls build/libs/|grep jar| head -1"
+				   def userName = "statuser"
                    jarName = jarName.trim()
                    sshagent(['dc152500-562b-46c5-8097-e1ae443e967d']) {
-                       sh "scp build/libs/$jarName statuser@137.117.85.216:."
+                       sh "scp build/libs/$jarName $userName@${config.IPAddress}:."
                        try {
-                           sshCommand remote: remote, sudo:true, command: "fuser -k 8081/tcp"
+                           sshCommand remote: remote, sudo:true, command: "fuser -k ${config.port}/tcp"
                        } catch (Exception e) {
-                           print "No service running at port 8081"
+                           print "No service running at port ${config.port}"
                        }
                        sleep(10)
-                       sh 'ssh statuser@137.117.85.216 "sudo env SERVER.PORT=8081 nohup java -jar /home/statuser/sonarqubeTest-0.0.1-SNAPSHOT.jar </dev/null >runserver.log 2>&1 & disown -h"'
+                       sh 'ssh $userName@${config.IPAddress} "sudo env SERVER.PORT=${config.port} nohup java -jar /home/$userName/$jarName </dev/null >runserver.log 2>&1 & disown -h"'
                    }
                }
            }
@@ -50,7 +51,7 @@ pipeline {
                withSonarQubeEnv('Sonarqube') {
                    // requires SonarQube Scanner for Gradle 2.1+
                    // It's important to add --info because of SONARJNKNS-281
-                    sh "./gradlew --info Sonarqube -Dsonar.projectKey=sonar-qube-test -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=sonar-qube-test"
+                    sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
                }
                 // Remember the add webhook in sonarqube for the project - (Needs an additional project key setup)
                timeout(time: 10, unit: "MINUTES") { 

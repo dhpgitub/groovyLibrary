@@ -36,7 +36,7 @@ pipeline {
                            print "No service running at port ${config.port}"
                        }
                        sleep(10)
-                       sh 'ssh $userName@${config.IPAddress} "sudo env SERVER.PORT=${config.port} nohup java -jar /home/$userName/$jarName </dev/null >runserver.log 2>&1 & disown -h"'
+                       sh "ssh $userName@${config.IPAddress} 'sudo env SERVER.PORT=${config.port} nohup java -jar /home/$userName/$jarName </dev/null >runserver.log 2>&1 & disown -h'"
                    }
                }
            }

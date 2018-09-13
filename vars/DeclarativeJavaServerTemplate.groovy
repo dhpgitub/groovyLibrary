@@ -51,7 +51,7 @@ pipeline {
        }
        stage('Automated Testing'){
            steps {
-			   if (${config.automatatedTest}) {
+			   if ("${config.automatatedTest}") {
 			       sh 'gradle automatedTests'
 			   } else {
 				   print "Automated tests were not run"

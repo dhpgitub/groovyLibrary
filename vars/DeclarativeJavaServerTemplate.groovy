@@ -51,7 +51,12 @@ pipeline {
        }
        stage('Automated Testing'){
            steps {
-               sh 'gradle automatedTests'
+			   if [ ${config.automatatedTest} ]
+			   then
+			       sh 'gradle automatedTests'
+			   else
+				   print "Automated tests weren't run"
+			   fi
            }
        }
        stage('Sonarqube Scan'){

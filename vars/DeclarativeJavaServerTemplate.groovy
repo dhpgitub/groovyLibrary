@@ -34,11 +34,8 @@ pipeline {
 					   print "port: ${config.port}"
 					   print "jarName: $jarName"
 					   print "userName: $userName"
-					   try {
-					      sshCommand remote: remote, sudo:true, command: "mkdir -p /var/local/${config.projectName}"
-					   } catch (Exception e) {
-					      print "Unable to find property"
-					   }
+					   //sshCommand remote: remote, sudo:true, command: "mkdir -p /var/local/${config.projectName}"
+					   sh "ssh $userName@${config.IPAddress} 'sudo mkdir -p /var/local/${config.projectName}'"
 					   
                        sh "scp build/libs/$jarName $userName@${config.IPAddress}:/var/local/${config.projectName}"
                        try {

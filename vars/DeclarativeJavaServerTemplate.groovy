@@ -29,7 +29,7 @@ pipeline {
 				   def userName = "statuser"
                    jarName = jarName.trim()
                    sshagent(['dc152500-562b-46c5-8097-e1ae443e967d']) {
-					   sh "mkdir -p /var/local/${config.projectName}"
+					   sh "sudo mkdir -p /var/local/${config.projectName}"
                        sh "scp build/libs/$jarName $userName@${config.IPAddress}:/var/local/${config.projectName}"
                        try {
                            sshCommand remote: remote, sudo:true, command: "fuser -k ${config.port}/tcp"

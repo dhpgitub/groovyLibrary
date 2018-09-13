@@ -29,6 +29,11 @@ pipeline {
 				   def userName = "statuser"
                    jarName = jarName.trim()
                    sshagent(['dc152500-562b-46c5-8097-e1ae443e967d']) {
+					   print "projectName: ${config.projectName}"
+					   print "IPAddress: ${config.IPAddress}"
+					   print "port: ${config.port}"
+					   print "jarName: $jarName"
+					   print "userName: $userName"
 					   sshCommand remote: remote, sudo:true, command: "mkdir -p /var/local/${config.projectName}"
                        sh "scp build/libs/$jarName $userName@${config.IPAddress}:/var/local/${config.projectName}"
                        try {

@@ -36,7 +36,7 @@ pipeline {
 					   print "userName: $userName"
 					   //sshCommand remote: remote, sudo:true, command: "mkdir -p /var/local/${config.projectName}"
 					   sh "ssh $userName@${config.IPAddress} 'sudo mkdir -p /var/local/${config.projectName}'"
-					   
+					   sh "ssh $userName@${config.IPAddress} 'sudo chmod 777 /var/local/${config.projectName}'"
                        sh "scp build/libs/$jarName $userName@${config.IPAddress}:/var/local/${config.projectName}"
                        try {
                            sshCommand remote: remote, sudo:true, command: "fuser -k ${config.port}/tcp"

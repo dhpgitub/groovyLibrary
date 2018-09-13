@@ -55,7 +55,7 @@ pipeline {
 			   then
 			       sh 'gradle automatedTests'
 			   else
-				   print "Automated tests weren't run"
+				   print "Automated tests were not run"
 			   fi
            }
        }

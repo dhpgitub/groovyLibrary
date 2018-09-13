@@ -79,16 +79,16 @@ pipeline {
                }
            }
        }
-		post {
-			script {
-				success {
-					if (config.successEmail) {
-						emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAddress}"
-					}
+    }
+	post {
+		script {
+			success {
+				if (config.successEmail) {
+					emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAddress}"
 				}
-				failure {
-					emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAddress}"
-				}
+			}
+			failure {
+				emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAddress}"
 			}
 		}
 	}

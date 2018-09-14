@@ -5,7 +5,7 @@ def config = [:]
         body()
 pipeline {
     agent {
-        label 'master'
+        label 'worker'
     }
     tools {
         gradle 'GRADLE_LATEST'

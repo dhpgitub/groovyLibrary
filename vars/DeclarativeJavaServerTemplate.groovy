@@ -26,9 +26,9 @@ pipeline {
            steps{
                script{
                    def jarName = sh returnStdout: true, script: "ls build/libs/|grep jar| head -1"
-				   def userName = "statuser"
+				   def userName = "jenkins"
                    jarName = jarName.trim()
-                   sshagent(['dc152500-562b-46c5-8097-e1ae443e967d']) {
+                   sshagent(['faefb19b-7645-4251-a8bd-edd495ddc10d']) {
 					   print "projectName: ${config.projectName}"
 					   print "IPAddress: ${config.IPAddress}"
 					   print "port: ${config.port}"

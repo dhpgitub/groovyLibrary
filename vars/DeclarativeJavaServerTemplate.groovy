@@ -85,13 +85,15 @@ pipeline {
         success {
             script {
                 if (config.successEmail) {
-                    emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAddress}"
+			print "success"
+                    	// emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAddress}"
                 }
             }
         }
         failure {
-				emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAddress}"
-        }
+		print "job failed"
+		  //emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAddress}"
+		}
 	}
 }
 }

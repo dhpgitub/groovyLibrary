@@ -35,8 +35,8 @@ pipeline {
 					   print "jarName: $jarName"
 					   print "userName: $userName"
 					   //sshCommand remote: remote, sudo:true, command: "mkdir -p /var/local/${config.projectName}"
-					   sh "ssh -o StrictHostKeyChecking=no $userName@${config.IPAddress} 'sudo mkdir -p /var/local/${config.projectName}'"
-					   sh "ssh -o StrictHostKeyChecking=no $userName@${config.IPAddress} 'sudo chmod 777 /var/local/${config.projectName}'"
+					   sh "ssh -o StrictHostKeyChecking=no $userName@${config.IPAddress} 'mkdir -p /var/local/${config.projectName}'"
+					   sh "ssh -o StrictHostKeyChecking=no $userName@${config.IPAddress} 'chmod 777 /var/local/${config.projectName}'"
                        sh "scp build/libs/$jarName -o StrictHostKeyChecking=no $userName@${config.IPAddress}:/var/local/${config.projectName}"
                        try {
                            sshCommand remote: remote, sudo:true, command: "fuser -k ${config.port}/tcp"
@@ -44,7 +44,7 @@ pipeline {
                            print "No service running at port ${config.port}"
                        }
                        sleep(10)
-                       sh "ssh $userName@${config.IPAddress} 'sudo env SERVER.PORT=${config.port} nohup java -jar /var/local/${config.projectName}/$jarName </dev/null >runserver.log 2>&1 & disown -h'"
+                       sh "ssh $userName@${config.IPAddress} 'env SERVER.PORT=${config.port} nohup java -jar /var/local/${config.projectName}/$jarName </dev/null >runserver.log 2>&1 & disown -h'"
                    }
                }
            }

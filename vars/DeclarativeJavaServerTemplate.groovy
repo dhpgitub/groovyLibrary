@@ -39,12 +39,13 @@ pipeline {
 					   sh "ssh $userName@${config.IPAddress} 'sudo chmod 777 /var/local/${config.projectName}'"
                        sh "scp build/libs/$jarName $userName@${config.IPAddress}:/var/local/${config.projectName}"
                        try {
-                           sshCommand remote: remote, sudo:true, command: "fuser -k ${config.port}/tcp"
+                           //sshCommand remote: remote, sudo:true, command: "fuser -k ${config.port}/tcp"
+			   sh "ssh $userName@${config.IPAddress} 'sudo fuser -k ${config.port}/tcp'"
                        } catch (Exception e) {
                            print "No service running at port ${config.port}"
                        }
                        sleep(10)
-                       sh "ssh $userName@${config.IPAddress} 'sudo env SERVER.PORT=${config.port} nohup java -jar /var/local/${config.projectName}/$jarName </dev/null >runserver.log 2>&1 & disown -h'"
+                       sh "ssh $userName@${config.IPAddress} 'env SERVER.PORT=${config.port} nohup java -jar /var/local/${config.projectName}/$jarName </dev/null >/var/local/${config.projectName}/${config.projectName}.log 2>&1 & disown -h'"
                    }
                }
            }
@@ -84,13 +85,15 @@ pipeline {
         success {
             script {
                 if (config.successEmail) {
-                    emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAddress}"
+			print "success"
+                    	// emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAddress}"
                 }
             }
         }
         failure {
-				emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAddress}"
-        }
+		print "job failed"
+		  //emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAddress}"
+		}
 	}
 }
 }

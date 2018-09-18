@@ -3,7 +3,7 @@ def config = [:]
         body.resolveStrategy = Closure.DELEGATE_FIRST
         body.delegate = config
         body()
-def registryURL = dhpcontainreg.azurecr.io
+def registryURL = "dhpcontainreg.azurecr.io"
 pipeline{
 	agent {
 		label 'worker'

@@ -9,7 +9,7 @@ pipeline{
         gradle 'GRADLE_LATEST'
     }
     stages{
-        stage("Checkout ${config.projectName}"){
+        stage("Checkout Project"){
             steps{
 				print "${config.message}"
 				print "${config.gitURL}"

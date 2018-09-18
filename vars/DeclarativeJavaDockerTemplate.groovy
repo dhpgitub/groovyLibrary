@@ -4,10 +4,12 @@ def config = [:]
         body.delegate = config
         body()
 pipeline{
-    agent any
-    tools {
-        gradle 'GRADLE_LATEST'
-    }
+	agent {
+		label 'worker'
+	}
+    	tools {
+        	gradle 'GRADLE_LATEST'
+    	}
     stages{
         stage("Checkout Project"){
             steps{

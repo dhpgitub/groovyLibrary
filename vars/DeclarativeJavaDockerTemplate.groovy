@@ -74,9 +74,9 @@ pipeline{
 	   	}
             }
         }
-        stage("sonar scan"){
+        stage("Sonar Scan"){
             steps{
-                withSonarQubeEnv("sonarqube") {
+                withSonarQubeEnv("Sonarqube") {
                     sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
                 }
                 // Remember the add webhook in sonarqube for the project - (Needs an additional project key setup)

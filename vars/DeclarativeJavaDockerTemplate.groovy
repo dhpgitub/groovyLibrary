@@ -62,14 +62,14 @@ pipeline{
         }
         stage('automated tests'){
             steps{
-				script {
-			       if (config.automatatedTest) {
-			           sh 'gradle automatedTests'
-					   archiveArtifacts "build/reports/tests/test/*.html"
-			       } else {
-				       print "Automated tests were not run"
-			       }
-			   }
+		script {
+		       if (config.automatatedTest) {
+			   sh 'gradle automatedTests'
+			   archiveArtifacts "build/reports/tests/test/*.html"
+		       } else {
+			   print "Automated tests were not run"
+		       }
+	   	}
             }
         }
         stage("sonar scan"){
@@ -88,13 +88,15 @@ pipeline{
                 }
             }
         }
-		stage("Push to registry") {
-			steps{
+	stage("Push to registry") {
+		steps{
+			script {
 				docker.withRegistry("http://dhpcontainreg.azurecr.io", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
-					sh "docker push ${config.repo}/${config.projectName}:${config.versionNum}"
+				sh "docker push ${config.repo}/${config.projectName}:${config.versionNum}"
 				}
 			}
 		}
+	}
         //stage('fortify'){
         //    agent{
         //        label "fortify"

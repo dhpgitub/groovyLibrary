@@ -3,6 +3,7 @@ def config = [:]
         body.resolveStrategy = Closure.DELEGATE_FIRST
         body.delegate = config
         body()
+def registryURL = dhpcontainreg.azurecr.io
 pipeline{
 	agent {
 		label 'worker'
@@ -40,7 +41,7 @@ pipeline{
             steps{
                 script{
                     docker.withRegistry("http://dhpcontainreg.azurecr.io", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
-                        def testImage = docker.build("${config.repo}/${config.projectName}:${config.versionNum}")
+			    def testImage = docker.build("${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}")
                     }
                 }
             }
@@ -52,7 +53,7 @@ pipeline{
                         sh "docker container rm -f ${config.projectName}"
                     }catch(Exception ex){
                     }
-                    sh "docker container run --name ${config.projectName} -d -p ${config.portNumber}:9090 ${config.repo}/${config.projectName}:${config.versionNum}"
+                    sh "docker container run --name ${config.projectName} -d -p ${config.portNumber}:9090 ${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}"
                     //timeout(time: 30, unit: "SECONDS") {
                     //    waitUntil {
                     //        def r = sh script: "wget -q http://172.23.174.228:30012/swagger-ui.html -O /dev/null", returnStatus: true
@@ -94,7 +95,7 @@ pipeline{
 		steps{
 			script {
 				docker.withRegistry("http://dhpcontainreg.azurecr.io", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
-				sh "docker push ${config.repo}/${config.projectName}:${config.versionNum}"
+				sh "docker push ${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}"
 				}
 			}
 		}

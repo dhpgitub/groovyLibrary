@@ -27,15 +27,15 @@ pipeline{
                 stash includes: "", name: "gradle"
             }
         }
-        stage('build'){
-            steps{
-                sh 'gradle clean build wrapper'
-                archiveArtifacts "build/libs/*.jar"
-                sh "./gradlew dependencyCheckAnalyze"
-                archiveArtifacts "build/reports/dependency-check-report.html"
+        //stage('build'){
+        //    steps{
+        //        sh 'gradle clean build wrapper'
+        //       archiveArtifacts "build/libs/*.jar"
+        //        sh "./gradlew dependencyCheckAnalyze"
+        //       archiveArtifacts "build/reports/dependency-check-report.html"
 
-            }
-        }
+        //    }
+        //}
 		
         stage('build docker image'){
             steps{
@@ -75,22 +75,22 @@ pipeline{
 	   	}
             }
         }
-        stage("Sonar Scan"){
-            steps{
-                withSonarQubeEnv("Sonarqube") {
-                    sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
-                }
+        //stage("Sonar Scan"){
+        //    steps{
+        //        withSonarQubeEnv("Sonarqube") {
+        //            sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
+        //        }
                 // Remember the add webhook in sonarqube for the project - (Needs an additional project key setup)
-                timeout(time: 10, unit: "MINUTES") { 
-                    script {
-                        def qualitygate = waitForQualityGate()
-                        if (qualitygate.status != "OK") {
-                            error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
-                        }
-                    }
-                }
-            }
-        }
+        //        timeout(time: 10, unit: "MINUTES") { 
+        //            script {
+        //                def qualitygate = waitForQualityGate()
+        //                if (qualitygate.status != "OK") {
+        //                    error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 	stage("Push to registry") {
 		steps{
 			script {

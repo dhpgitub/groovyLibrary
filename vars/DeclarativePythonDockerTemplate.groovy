@@ -17,7 +17,8 @@ pipeline{
 				print "${config.message}"
 				print "${config.gitURL}"
 				print "${config.projectName}"
-				print "${config.portNumber}"
+				print "${config.containerPort}"
+		    		print "${config.hostPort}"
 				print "${config.emailFlag}"
 				print "${config.emailAdd}"
 				print "${config.automatatedTest}"
@@ -53,7 +54,7 @@ pipeline{
                         sh "docker container rm -f ${config.projectName}"
                     }catch(Exception ex){
                     }
-                    sh "docker container run --name ${config.projectName} -d -p ${config.portNumber}:5000 ${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}"
+                    sh "docker container run --name ${config.projectName} -d -p ${config.containerPort}:${config.hostPort} ${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}"
                     //timeout(time: 30, unit: "SECONDS") {
                     //    waitUntil {
                     //        def r = sh script: "wget -q http://172.23.174.228:30012/swagger-ui.html -O /dev/null", returnStatus: true

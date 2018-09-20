@@ -83,9 +83,7 @@ pipeline{
 			withSonarQubeEnv('Sonarqube') {
 	    			sh "${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=pytest -Dsonar.projectName=pytest -Dsonar.sources=."
 			}
-        //        withSonarQubeEnv("Sonarqube") {
-        //            sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
-        //        }
+		}
                 // Remember the add webhook in sonarqube for the project - (Needs an additional project key setup)
                 timeout(time: 10, unit: "MINUTES") { 
                     script {

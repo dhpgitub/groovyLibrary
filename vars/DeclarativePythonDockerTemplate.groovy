@@ -77,6 +77,7 @@ def call(body){
             }
             stage("Sonar Scan"){
                 steps{
+                    sh "curl -u admin:admin -X POST 'http://52.179.212.186:9000/api/projects/create?key=ms-name-normalization&name=ms-name-normalization'"
 	    	        script {
 			            def scannerHome = tool 'SonarQube123';
 			            withSonarQubeEnv('Sonarqube') {

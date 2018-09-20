@@ -76,8 +76,14 @@ pipeline{
 	   	}
             }
         }
-        //stage("Sonar Scan"){
-        //    steps{
+        stage("Sonar Scan"){
+            steps{
+                script {
+                    scannerHome = tool 'SonarScanner';
+                }
+                withSonarQubeEnv('SonarQube') {
+                    bat "${scannerHome}/bin/sonar-scanner.bat"
+                }
         //        withSonarQubeEnv("Sonarqube") {
         //            sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
         //        }
@@ -90,8 +96,8 @@ pipeline{
         //                }
         //            }
         //        }
-        //    }
-        //}
+            }
+        }
 	stage("Push to registry") {
 		steps{
 			script {

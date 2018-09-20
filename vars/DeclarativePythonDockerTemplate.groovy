@@ -82,7 +82,7 @@ pipeline{
                     scannerHome = tool 'SonarScanner';
                 }
                 withSonarQubeEnv('SonarQube') {
-                    bat "${scannerHome}/bin/sonar-scanner.bat"
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
         //        withSonarQubeEnv("Sonarqube") {
         //            sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"

@@ -82,7 +82,7 @@ pipeline{
                     def scannerHome = tool 'SonarQube123';
                 }
                 withSonarQubeEnv('Sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=pytest -Dsonar.projectName=pytest -Dsonar.language=py -Dsonar.sources=."
                 }
         //        withSonarQubeEnv("Sonarqube") {
         //            sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"

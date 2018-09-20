@@ -78,9 +78,7 @@ pipeline{
         }
         stage("Sonar Scan"){
             steps{
-                script {
-                    def scannerHome = tool 'SonarQube123';
-                }
+	    	def scannerHome = tool 'SonarQube123';
                 withSonarQubeEnv('Sonarqube') {
                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=pytest -Dsonar.projectName=pytest -Dsonar.language=py -Dsonar.sources=."
                 }

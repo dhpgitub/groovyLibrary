@@ -41,7 +41,7 @@ pipeline{
         stage('build docker image'){
             steps{
                 script{
-                    docker.withRegistry("http://dhpcontainreg.azurecr.io", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
+                    docker.withRegistry("http://${registryURL}", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
 			    def testImage = docker.build("${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}")
                     }
                 }
@@ -95,7 +95,7 @@ pipeline{
 	stage("Push to registry") {
 		steps{
 			script {
-				docker.withRegistry("http://dhpcontainreg.azurecr.io", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
+				docker.withRegistry("http://${registryURL}", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
 				sh "docker push ${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}"
 				}
 			}

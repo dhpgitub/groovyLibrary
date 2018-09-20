@@ -87,13 +87,13 @@ pipeline{
         //            sh "./gradlew --info Sonarqube -Dsonar.projectKey=${config.projectName} -Dsonar.dependencyCheck.reportPath=${WORKSPACE}/build/reports/dependency-check-report.xml -Dsonar.projectName=${config.projectName}"
         //        }
                 // Remember the add webhook in sonarqube for the project - (Needs an additional project key setup)
-        //        timeout(time: 10, unit: "MINUTES") { 
-        //            script {
-        //                def qualitygate = waitForQualityGate()
-        //                if (qualitygate.status != "OK") {
-        //                    error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
-        //                }
-        //            }
+                timeout(time: 10, unit: "MINUTES") { 
+                    script {
+                        def qualitygate = waitForQualityGate()
+                        if (qualitygate.status != "OK") {
+                            error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
+                        }
+                    }
                 }
             }
         }

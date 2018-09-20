@@ -94,7 +94,7 @@ pipeline{
         //                    error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
         //                }
         //            }
-        //        }
+                }
             }
         }
 	stage("Push to registry") {

@@ -14,7 +14,7 @@ pipeline {
        stage('Git Checkout'){
            steps{
                cleanWs()
-               git credentialsId: '65bc32a1-9a81-446c-b37b-c0ac940783da', url: "${config.gitURL}"
+               git credentialsId: '65bc32a1-9a81-446c-b37b-c0ac940783da', url: "${config.gitURL}", branch:"${config.branchName}"
            }
        }
        stage('Gradle Build'){

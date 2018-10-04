@@ -1,9 +1,16 @@
+import groovy.json.*
+@NonCPS
+def jsonParse(def json) {
+    new groovy.json.JsonSlurperClassic().parseText(json)
+}
 def call(body){
     def config = [:]
         body.resolveStrategy = Closure.DELEGATE_FIRST
         body.delegate = config
         body()
     def registryURL = "dhpcontainreg.azurecr.io"
+    def tenableURL = "registry.cloud.tenable.com"
+    String tenableApiUrl = " https://cloud.tenable.com"
     pipeline{
         agent {
             label 'worker'

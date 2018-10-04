@@ -1,9 +1,16 @@
+import groovy.json.*
+@NonCPS
+def jsonParse(def json) {
+    new groovy.json.JsonSlurperClassic().parseText(json)
+}
 def call(body){
 def config = [:]
         body.resolveStrategy = Closure.DELEGATE_FIRST
         body.delegate = config
         body()
 def registryURL = "dhpcontainreg.azurecr.io"
+def tenableURL = "registry.cloud.tenable.com"
+String tenableApiUrl = " https://cloud.tenable.com"
 pipeline{
 	agent {
 		label 'worker'
@@ -76,6 +83,57 @@ pipeline{
 	   	}
             }
         }
+	stage("Tenable scan") {
+		steps{
+			script {
+				withCredentials([usernamePassword(credentialsId: '60b12faf-7ddb-49d4-aff9-e08c6a3ef1c1', passwordVariable: 'secret', usernameVariable: 'access')]) {
+                    sh "docker login -u $access -p $secret $tenableURL"
+                    sh "docker tag ${config.projectName}:${config.versionNum} ${tenableURL}/${config.projectName}:${config.versionNum}"
+                    def pushStdout = sh returnStdout:true, script:"docker push ${tenableURL}/${config.projectName}:${config.versionNum}"
+                    print('-----------------------PRINTING SHELL OUT--------------------------------')
+
+                    print pushStdout
+                    // getting image sha
+
+                    String[] lines = pushStdout.split("\n")
+                    String lastLine = lines[lines.length - 1]
+                    String imageSha = (lastLine.split(" "))[2]
+                    imageSha = imageSha.substring(imageSha.lastIndexOf(":") + 1)
+
+                    print('-----------------------PRINTING IMAGE SHA OUT--------------------------------')
+                    print(imageSha)
+                    // waiting for container security scans
+                    waitUntil{
+                        
+                        String method="container-security/api/v1/jobs/image_status_digest?image_digest="+imageSha.trim()
+                        def report = sh returnStdout:true, script:"curl -sH 'X-ApiKeys: accessKey=$access; secretKey=$secret' ${tenableApiUrl}/${method}"
+                        print("---------------------")
+                        print report
+
+                        def reportJson =  jsonParse(report)
+                        print(reportJson["job_status"])
+                        return(reportJson["job_status"]=="completed")
+                    }
+                    
+                    
+                    //waiting for the compliance scan 
+                    
+                        method="container-security/api/v1/compliancebyname?image=${config.projectName}'&'repo=library'&'tag=${config.versionNum}"
+                        report = sh returnStdout:true, script:"curl -sH 'X-ApiKeys: accessKey=$access; secretKey=$secret' ${tenableApiUrl}/${method}"
+                        reportJson =  jsonParse(report)
+                        print(reportJson)
+                        print(reportJson["status"])
+                        if(reportJson["status"] != "pass"){
+                            method="container-security/api/v1/reports/by_image_digest?image_digest="+imageSha.trim()
+                            report = sh returnStdout:true, script:"curl -sH 'X-ApiKeys: accessKey=$access; secretKey=$secret' ${tenableApiUrl}/${method}"
+                            reportJson =  jsonParse(report)
+                            print(reportJson)
+                            error 'Compliance scan failed Please see the report below'
+                        }
+                }
+			}
+		}
+	}
         stage("Sonar Scan"){
             steps{
                 withSonarQubeEnv("Sonarqube") {

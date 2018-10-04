@@ -40,7 +40,7 @@ def call(body){
                 steps{
                     script{
                         docker.withRegistry("http://${registryURL}", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
-                            def testImage = docker.build("${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}")
+                            def testImage = docker.build("${config.projectName}:${config.versionNum}")
                         }
                     }
                 }
@@ -148,6 +148,7 @@ def call(body){
                 steps{
                     script {
                         docker.withRegistry("http://${registryURL}", "fd863aba-dd56-4c08-abd4-c6fcd9f4af57") {
+			    docker.build("${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}")
                             sh "docker push ${registryURL}/${config.repo}/${config.projectName}:${config.versionNum}"
                         }
                     }

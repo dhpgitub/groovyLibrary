@@ -182,17 +182,17 @@ def call(body){
             //     }
             // }
         }
-        // post{
-        //     script{
-        //         success{
-        //             if (config.emailFlag) {
-        //                 emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAdd}"
-        //             }
-        //         }
-        //         failure{
-        //             emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAdd}"
-        //         }
-        //     }
-        // }
+         post{
+             script{
+                 success{
+                     if (config.emailFlag) {
+                         emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAdd}"
+                     }
+                 }
+                 failure{
+                     emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAdd}"
+                 }
+             }
+         }
     }
 }

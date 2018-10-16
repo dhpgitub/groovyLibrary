@@ -187,12 +187,12 @@ def call(body){
 			sh "docker system prune -a"
                      script{
                         if (config.emailFlag) {
-                            emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAdd}"
+                            //emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAdd}"
                         }
                      }
                  }
                  failure{
-                     emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAdd}"
+                     //emailext body: 'Build failed', subject: 'Jenkins test', to: "${config.emailAdd}"
                  }
             //  }
          }

@@ -183,7 +183,7 @@ def call(body){
             // }
         }
          post{
-            //  script{
+		 sh "docker system prune -a"
                  success{
                      script{
                         if (config.emailFlag) {

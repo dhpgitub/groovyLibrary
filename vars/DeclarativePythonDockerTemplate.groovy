@@ -184,7 +184,7 @@ def call(body){
         }
          post{
                  success{
-			sh "docker system prune -a"
+			sh "docker system prune -f"
                      //script{
                         //if (config.emailFlag) {
                             //emailext body: 'Build success', subject: 'Jenkins test', to: "${config.emailAdd}"
